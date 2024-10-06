@@ -1,0 +1,49 @@
+import pandas as pd
+
+# Load deal sheet data from CSV
+def load_deal_sheet(file_path):
+    try:
+        df = pd.read_csv(file_path)
+        return df
+    except FileNotFoundError:
+        print("File not found. Please check the file path.")
+        return None
+
+# Analyze deal sheet
+def analyze_deals(df):
+    # Calculate Profit (Revenue - Cost)
+    df['Profit'] = df['Revenue'] - df['Cost']
+
+    # Calculate Profit Margin (Profit / Revenue)
+    df['Profit Margin (%)'] = (df['Profit'] / df['Revenue']) * 100
+
+    # Calculate ROI (NOI / Price)
+    df['ROI (%)'] = (df['NOI'] / df['Price']) * 100
+
+    return df
+
+# Display key metrics for each deal
+def display_analysis(df):
+    for index, row in df.iterrows():
+        print(f"Deal: {row['Deal Name']}")
+        print(f"Price: ${row['Price']:.2f}")
+        print(f"Revenue: ${row['Revenue']:.2f}")
+        print(f"Cost: ${row['Cost']:.2f}")
+        print(f"Profit: ${row['Profit']:.2f}")
+        print(f"Profit Margin: {row['Profit Margin (%)']:.2f}%")
+        print(f"ROI: {row['ROI (%)']:.2f}%")
+        print("-" * 40)
+
+# Main function
+def main():
+    file_path = input("Enter the path to the deal sheet CSV file: ")
+    deal_df = load_deal_sheet(file_path)
+
+    if deal_df is not None:
+        analyzed_df = analyze_deals(deal_df)
+        display_analysis(analyzed_df)
+    else:
+        print("No data to analyze.")
+
+if __name__ == "__main__":
+    main()
